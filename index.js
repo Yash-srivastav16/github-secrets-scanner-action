@@ -38,7 +38,7 @@ async function run() {
       per_page: 1,
     });
 
-    core.info(commit)
+    core.info(commits)
     const latestCommitHash = commits.data[0].sha;
     core.info(`Latest commit hash: ${latestCommitHash}`);
 
