@@ -38,7 +38,7 @@ async function run() {
       per_page: 1,
     });
 
-    const latestCommitHash = commits.data[0].sha;
+    const latestCommitHash = commits.data[1].sha;
     core.info(`Latest commit hash: ${latestCommitHash}`);
 
     // Check for secrets in the latest commit
