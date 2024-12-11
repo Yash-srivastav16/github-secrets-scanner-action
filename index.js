@@ -4,8 +4,8 @@ const simpleGit = require('simple-git');
 const git = simpleGit();
 
 // Helper function to fetch commits and check files for secrets
-async function checkCommitsForSecrets(commitHash, patterns) {
-  const diff = await git.diff([commitHash + '^', commitHash]);
+async function checkCommitsForSecrets(commitHash,previousCommitHash, patterns) {
+  const diff = await git.diff([commitHash, previousCommitHash]);
   const regexPatterns = patterns.split(',').map(p => new RegExp(p, 'i'));
 
   let foundSecrets = [];
@@ -38,12 +38,14 @@ async function run() {
       per_page: 2,
     });
 
-    core.info(commits)
-    const latestCommitHash = commits.data[1].sha;
+   
+    const latestCommitHash = commits.data[0].sha;
+    const previousCommitHash = commits.data[1].sha;
     core.info(`Latest commit hash: ${latestCommitHash}`);
+    core.info(`Latest commit hash: ${previousCommitHash}`);
 
     // Check for secrets in the latest commit
-    const secretsFound = await checkCommitsForSecrets(latestCommitHash, patterns);
+    const secretsFound = await checkCommitsForSecrets(latestCommitHash, previousCommitHash, patterns);
 
     if (secretsFound.length > 0) {
       core.setFailed(`Found secrets: ${secretsFound.join(', ')}`);
