@@ -1,0 +1,19 @@
+name: 'Github Secrets Scanner'
+description: 'Scans your code for secrets like API keys, passwords, and tokens'
+author: 'Yash Srivastav'
+inputs:
+  repo:
+    description: 'The GitHub repository to scan (e.g., owner/repo)'
+    required: true
+  token:
+    description: 'The branch to scan (default: main)'
+    required: true
+    default: 'main'
+  patterns:
+    description: 'Comma-separated list of regex patterns to detect secrets (default: common patterns)'
+    required: false
+    default: 'API_KEY,SECRET_KEY,TOKEN'
+
+runs:
+  using: 'node16'
+  main: 'index.js'

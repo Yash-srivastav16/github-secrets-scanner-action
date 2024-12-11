@@ -1,0 +1,59 @@
+const core = require('@actions/core');
+const github = require('@actions/github');
+const simpleGit = require('simple-git');
+const git = simpleGit();
+const axios = require('axios');
+
+//Helper function to fetch commits and check files for secrets
+async function checkCommitsForSecrets(commitHash, patterns){
+    const diff = await git.diff([commitHash + '^', commitHash]);
+    const regexPatterns = patterns.split(',').map(p => new RegExp(p ,'i'));
+
+    let foundSecrets = [];
+
+    regexPatterns.foreach(patterns => {
+        if (diff && patterns.test(diff)) {
+            foundSecrets.push(patterns.toString());
+        }
+    });
+
+    return foundSecrets;
+}
+
+async function run(){
+    try {
+        const repo = core.getInput('repo');
+        const token = core.getInput('token');
+        const branch = core.getInput('branch');
+        const patterns = core.getInput('patterns');
+
+        const [owner , repoName] = repo.split('/');
+
+        const oktokit = github.getOctokit(token);
+
+        // Fetch the latest commit from the repository
+        const commits = await oktokit.rest.repos.listCommits({
+            owner,
+            repo: repoName,
+            sha: branch,
+            per_page: 1,
+        });
+
+        const latestCommitHash = commits.data[0].sha;
+        core.info(`Latest commit hash: ${latestCommitHash}`);
+
+         // Check for secrets in the latest commit
+        const secretsFound = await checkCommitsForSecrets(latestCommitHash, patterns);
+
+        if (secretsFound.length > 0) {
+        core.setFailed(`Found secrets: ${secretsFound.join(', ')}`);
+        } else {
+        core.info('No secrets found in the latest commit!');
+        }
+
+    } catch (error) {
+        core.setFailed(error.message);
+    }
+}
+
+run();
