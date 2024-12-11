@@ -1,0 +1,1 @@
+# github-secrets-scanner-action
