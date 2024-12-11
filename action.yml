@@ -20,7 +20,7 @@ inputs:
 
 branding:
   icon: 'check' 
-  color: '#FF5733'  
+  color: 'white'  
 
 runs:
   using: 'node16'
