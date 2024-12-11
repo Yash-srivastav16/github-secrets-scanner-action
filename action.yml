@@ -6,14 +6,17 @@ inputs:
     description: 'The GitHub repository to scan (e.g., owner/repo)'
     required: true
   token:
-    description: 'The branch to scan (default: main)'
+    description: 'GitHub authentication token for API access'
     required: true
+  branch:
+    description: 'The branch to scan (default: main)'
+    required: false
     default: 'main'
   patterns:
     description: 'Comma-separated list of regex patterns to detect secrets (default: common patterns)'
     required: false
     default: 'API_KEY,SECRET_KEY,TOKEN'
-
+    
 runs:
   using: 'node16'
   main: 'index.js'
