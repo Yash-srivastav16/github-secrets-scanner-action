@@ -35,11 +35,11 @@ async function run() {
       owner,
       repo: repoName,
       sha: branch,
-      per_page: 1,
+      per_page: 2,
     });
 
     core.info(commits)
-    const latestCommitHash = commits.data[0].sha;
+    const latestCommitHash = commits.data[1].sha;
     core.info(`Latest commit hash: ${latestCommitHash}`);
 
     // Check for secrets in the latest commit
