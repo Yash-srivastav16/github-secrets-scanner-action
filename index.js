@@ -2,7 +2,6 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const simpleGit = require('simple-git');
 const git = simpleGit();
-const axios = require('axios');
 
 //Helper function to fetch commits and check files for secrets
 async function checkCommitsForSecrets(commitHash, patterns){
