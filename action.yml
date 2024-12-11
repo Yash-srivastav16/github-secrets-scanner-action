@@ -16,7 +16,12 @@ inputs:
     description: 'Comma-separated list of regex patterns to detect secrets (default: common patterns)'
     required: false
     default: 'API_KEY,SECRET_KEY,TOKEN'
-    
+
+
+branding:
+  icon: 'check' 
+  color: '#FF5733'  
+
 runs:
   using: 'node16'
   main: 'index.js'
