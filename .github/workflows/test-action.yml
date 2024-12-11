@@ -13,6 +13,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+            fetch-depth: 0  # Ensure full commit history is fetched for proper diff comparison
+
+      - name: Install dependencies
+        run: npm install
+    
 
       - name: Run Secrets Scanner
         uses: Yash-srivastav16/github-secrets-scanner-action@v1
